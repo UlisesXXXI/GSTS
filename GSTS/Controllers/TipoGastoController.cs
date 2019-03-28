@@ -1,4 +1,6 @@
-﻿using GSTS.BaseDeDatos;
+﻿using AutoMapper;
+using GSTS.BaseDeDatos;
+using GSTS.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +23,10 @@ namespace GSTS.Controllers
         // GET: TipoGasto
         public ActionResult Index()
         {
-
+            var list =_ctx.TipoGasto.ToList();
+            List<TipoGastoViewModel> lvm = Mapper.Map<List<TipoGastoViewModel>>(list);
             
-            return View();
+            return View(lvm);
         }
 
         // GET: TipoGasto/Details/5

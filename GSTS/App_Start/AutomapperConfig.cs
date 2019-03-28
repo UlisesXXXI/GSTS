@@ -12,11 +12,10 @@ namespace GSTS.App_Start
     {
         public static void Register()
         {
+            
             Mapper.Initialize(cfg => {
-                cfg.CreateMap<Gasto, GastosViewModel>()
- .              
-
-                
+                cfg.CreateMap<Gasto, GastosViewModel>();
+                cfg.CreateMap<TipoGasto, TipoGastoViewModel>();
             });
         }
     }
