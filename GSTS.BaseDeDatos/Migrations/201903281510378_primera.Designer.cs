@@ -13,7 +13,7 @@ namespace GSTS.BaseDeDatos.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201903281258371_primera"; }
+            get { return "201903281510378_primera"; }
         }
         
         string IMigrationMetadata.Source

@@ -25,6 +25,9 @@ namespace GSTS
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            //moment Js Validacioens de fechas
+            bundles.Add(new ScriptBundle("~/Scripts/moment").Include("~/Scripts/moment.js"));
         }
     }
 }
