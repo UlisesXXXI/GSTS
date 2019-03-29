@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using GSTS.BaseDeDatos;
+using GSTS.models.Gastos;
 using GSTS.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -30,32 +32,73 @@ namespace GSTS.Controllers
         }
 
         // GET: TipoGasto/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            TipoGasto entidad = await _ctx.TipoGasto.FindAsync(id);
+            if(entidad == null)
+            {
+                return View("Error");
+            }
+            TipoGastoViewModel vm = Mapper.Map<TipoGastoViewModel>(entidad);
+            return View("Create",vm);
         }
 
         // GET: TipoGasto/Create
-        public ActionResult Create()
+        public ActionResult Create(TipoGastoViewModel vm = null)
         {
-            return View();
+            if(vm==null)
+            {
+                vm = new TipoGastoViewModel();
+            }
+            
+            return View(vm);
         }
 
         // POST: TipoGasto/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Insert(TipoGastoViewModel vm)
         {
             try
             {
-                // TODO: Add insert logic here
+                if(!ModelState.IsValid)
+                {
+                    return View("Create", vm);
+                }
+
+                TipoGasto entidad = Mapper.Map <TipoGasto>(vm);
+                _ctx.Entry(entidad).State = System.Data.Entity.EntityState.Added;
+                _ctx.SaveChanges();
 
                 return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return View("Error");
             }
         }
+
+        [HttpPost]
+        public ActionResult Update(TipoGastoViewModel vm)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View("Create", vm);
+                }
+
+                TipoGasto entidad = Mapper.Map<TipoGasto>(vm);
+                _ctx.Entry(entidad).State = System.Data.Entity.EntityState.Modified;
+                _ctx.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View("Create",vm);
+            }
+        }
+
 
         // GET: TipoGasto/Edit/5
         public ActionResult Edit(int id)
