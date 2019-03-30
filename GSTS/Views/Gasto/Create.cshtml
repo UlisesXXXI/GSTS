@@ -2,15 +2,20 @@
 
 @{
     ViewBag.Title = "Create";
+    string method = Model.Id == 0 ? "Insert" : "Update";
 }
 
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm(method,"Gasto",FormMethod.Post)) 
 {
     @Html.AntiForgeryToken()
+
+   
+        @Html.HiddenFor(m => m.Id);
     
+
     <div class="form-horizontal">
         <h4>GastosViewModel</h4>
         <hr />
@@ -34,7 +39,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Fecha, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Fecha, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextBoxFor(model => model.Fecha,"{0:dd/MM/yyyy}" ,new { htmlAttributes = new { @class = "form-control" } , data_fecha = "true" })
                 @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -49,7 +54,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value=@method class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -62,18 +67,34 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/moment.js"></script>
-
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    
     <script>
         
             $(function () {
-                $.validator.methods.date = function (value, element) {
-                    return this.optional(element) || moment(value, "DD/MM/YYYY", true).isValid();
-                }
-
-                $.validator.methods.number = function (value, element) {
-                    return this.optional(element) || moment(value, "DD/MM/YYYY", true).isValid();
-                }
+               
+                OverrideMethodsJquery();
+                AddDatepickers();
             });
+
+        function OverrideMethodsJquery() {
+            $.validator.methods.date = function (value, element) {
+                return this.optional(element) || moment(value, "DD/MM/YYYY", true).isValid();
+            }
+
+            $.validator.methods.number = function (value, element) {
+                return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+            }
+
+        }
+        function AddDatepickers() {
+            var ent = $("[data-fecha=true]");
+            ent.datepicker({
+                format: 'dd/mm/yyyy',
+                location:'es'
+                });
+            console.log(ent);
+        }
 
        
     </script>

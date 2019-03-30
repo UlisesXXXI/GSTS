@@ -13,6 +13,7 @@ namespace GSTS.ViewModel
         public GastosViewModel()
         {
             slTipoGastos = new List<SelectListItem>();
+            Fecha = DateTime.Now;
         }
 
         public int Id { get; set; }
@@ -24,6 +25,7 @@ namespace GSTS.ViewModel
         public string Descripcion { get; set; }
 
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Fecha { get; set; }
 
         public decimal Importe { get; set; }

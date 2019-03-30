@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GSTS.BaseDeDatos;
+using GSTS.models.Gastos;
 using GSTS.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -47,17 +48,24 @@ namespace GSTS.Controllers
 
         // POST: Gasto/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Update(GastosViewModel vm)
         {
             try
             {
-                // TODO: Add insert logic here
+                if(!ModelState.IsValid)
+                {
+                    return View("Create", vm);
+                }
+
+                Gasto g = Mapper.Map<Gasto>(vm);
+                _ctx.Entry(g).State = System.Data.Entity.EntityState.Modified;
+                _ctx.SaveChanges();
 
                 return RedirectToAction("Index");
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                return View("Create",vm);
             }
         }
 
@@ -71,11 +79,18 @@ namespace GSTS.Controllers
 
         // POST: Gasto/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Insert(GastosViewModel vm)
         {
             try
             {
-                // TODO: Add update logic here
+                if (!ModelState.IsValid)
+                {
+                    return View("Create", vm);
+                }
+
+                Gasto g = Mapper.Map<Gasto>(vm);
+                _ctx.Entry(g).State = System.Data.Entity.EntityState.Added;
+                _ctx.SaveChanges();
 
                 return RedirectToAction("Index");
             }
